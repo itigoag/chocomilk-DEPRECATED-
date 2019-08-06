@@ -1,0 +1,123 @@
+---
+- name: 'chocomilk'
+  hosts: travis-ci
+  connection: local
+  gather_facts: false
+  vars:
+    force_update: false
+    pwd: "{{ lookup('env','PWD') }}"
+  pre_tasks:
+    - name: 'Search package directory'
+      find:
+        paths: '{{ pwd }}'
+        recurse: false
+        file_type: directory
+        excludes: 'chocomilk'
+      register: register_package_directory
+
+    - name: 'Search .nuspec file'
+      find:
+        paths: '{{ pwd }}'
+        recurse: true
+        patterns: '*.nuspec'
+        hidden: true
+      register: register_nuspec_file
+
+    - name: 'Search .milk file'
+      find:
+        paths: '{{ pwd }}'
+        recurse: true
+        patterns: '.milk.yml'
+        hidden: true
+      register: register_milk_path
+
+    - name: 'Search chocolateyinstall file'
+      find:
+        paths: '{{ pwd }}'
+        recurse: true
+        patterns: '*chocolateyinstall.ps1'
+        hidden: true
+      register: register_chocolateyinstall_path
+
+    - name: 'Search README file'
+      find:
+        paths: '{{ register_package_directory.files[0].path }}'
+        recurse: true
+        patterns: '*README*'
+        hidden: true
+      register: register_readme_path
+
+    - name: 'Search package id'
+      xml:
+        path: '{{ register_nuspec_file.files[0].path }}'
+        namespaces:
+          ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
+        xpath: /ns:package/ns:metadata/ns:id
+        content: text
+      register: register_package_id
+
+    - name: 'Sets search info'
+      set_fact:
+        path_package: '{{ register_package_directory.files[0].path }}'
+        path_nuspec: '{{ register_nuspec_file.files[0].path }}'
+        path_chocolateyinstall: '{{ register_chocolateyinstall_path.files[0].path }}'
+        path_milk: '{{ register_milk_path.files[0].path }}'
+        path_readme: '{{ register_readme_path.files[0].path }}'
+        package_id: '{{ register_package_id.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}id"] }}'
+
+    - name: Include Playbooks Vara
+      include_vars:
+        file: '{{ path_milk }}'
+
+  tasks:
+    # Check new Version
+    - name: '{{ package_id }} : include check new version'
+      include_tasks: package/version.yml
+
+    - block:
+        # File Hash
+        - name: '{{ package_id }} : include file hash'
+          include_tasks: package/file_hash.yml
+          loop:
+            - '{{ url }}'
+            - '{{ url64 | default(false) }}'
+          when: loop_file_hash is defined and loop_file_hash
+          loop_control:
+            loop_var: loop_file_hash
+
+        - name: '{{ package_id }} : include searchreplace'
+          include_tasks: package/searchreplace.yml
+          loop: '{{ searchreplace | dict2items }}'
+          loop_control:
+            loop_var: loop_searchreplace
+          tags:
+            - test
+
+        - name: '{{ package_id }} : include nuspec'
+          include_tasks: package/nuspec.yml
+
+        - name: '{{ package_id }} : create package'
+          become: true
+          docker_container:
+            auto_remove: true
+            name: choco_pack
+            image: 'linuturk/mono-choco'
+            command: 'pack -vd {{ package_id }}.nuspec --outputdirectory {{ path_package }}'
+            working_dir: '{{ path_package }}/package'
+            volumes:
+              - '{{ path_package }}:{{ path_package }}'
+
+        - name: '{{ package_id }} : load deploy'
+          include_tasks: deploy/{{ loop_deploy.provider }}.yml
+          loop_control:
+            loop_var: loop_deploy
+          loop: '{{ deploy | flatten(levels=1) }}'
+
+        - name: '{{ package_id }} : load notifications'
+          include_tasks: notifications/{{ loop_notifications.provider }}.yml
+          loop_control:
+            loop_var: loop_notifications
+          when: loop_notifications is defined and loop_notifications
+          loop: '{{ notifications | flatten(levels=1) }}'
+
+      when: force_update | bool

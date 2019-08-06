@@ -1,0 +1,24 @@
+---
+- name: '{{ package_id }} : git config e-mail'
+  shell: 'git config --global user.email "{{ loop_deploy.email }}"'
+
+- name: '{{ package_id }} : git config name'
+  shell: 'git config --global user.name "{{ loop_deploy.name }}"'
+
+- name: '{{ package_id }} : git config safecrlf'
+  shell: 'git config --global core.safecrlf false'
+
+- name: '{{ package_id }} : git add files'
+  shell: 'git --git-dir={{ path_package }}/.git/ --work-tree={{ path_package }}/ add .'
+
+- name: '{{ package_id }} : git commit'
+  shell: "git --git-dir={{ path_package }}/.git/ --work-tree={{ path_package }}/ commit -m 'chocomilk: Update to {{ version }}'"
+
+- name: '{{ package_id }} : remove origin'
+  shell: git --git-dir={{ path_package }}/.git/ --work-tree={{ path_package }}/ remote remove origin
+
+- name: '{{ package_id }} : add origin'
+  shell: 'git --git-dir={{ path_package }}/.git/ --work-tree={{ path_package }}/ remote add origin https://{{ loop_deploy.key }}@{{ loop_deploy.url }}'
+
+- name: '{{ package_id }} : push'
+  shell: 'git --git-dir={{ path_package }}/.git/ --work-tree={{ path_package }}/ push origin HEAD:master'

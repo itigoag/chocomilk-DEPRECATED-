@@ -1,0 +1,10 @@
+---
+- name: 'Send notification to {{ loop_notifications.url }}'
+  mattermost:
+    url: '{{ loop_notifications.url }}'
+    api_key: '{{ loop_notifications.key }}'
+    text: '{{ package_id }} has been updated to version {{ version }}'
+    channel: '{{ loop_notifications.channel }}'
+    username: 'chocomilk'
+    icon_url: 'https://rawcdn.githack.com/itigoag/chocomilk/3ee96aed4195f465e2927bab9e96ce0fb1364cb5/docs/_images/chocomilk.jpg'
+  delegate_to: localhost

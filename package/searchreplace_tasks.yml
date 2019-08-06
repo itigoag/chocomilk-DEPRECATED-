@@ -1,0 +1,6 @@
+---
+- name: '{{ package_id }} : {{ loop_searchreplace.key }} : update'
+  replace:
+    path: '{{ path_package }}/package/{{ loop_searchreplace.key }}'
+    regexp: '{{ loop_searchreplace_tasks.regwxp }}'
+    replace: '{{ loop_searchreplace_tasks.replace }}'

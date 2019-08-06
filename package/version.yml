@@ -1,0 +1,32 @@
+---
+- name: '{{ package_id }} : load changelog: {{ changelog }}'
+  uri:
+    url: '{{ changelog }}'
+    return_content: true
+    validate_certs: false
+  register: register_changelog
+
+- name: '{{ package_id }} : load current version'
+  xml:
+    path: '{{ path_nuspec }}'
+    namespaces:
+      ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
+    xpath: /ns:package/ns:metadata/ns:version
+    content: text
+  register: register_nuspec
+
+- name: '{{ package_id }} : search version'
+  set_fact:
+    available_version: '{{ version }}'
+    current_version: '{{ register_nuspec.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}version"] }}'
+
+- block:
+    - name: '{{ package_id }} : check new version'
+      debug:
+        msg: 'Have new Version {{ available_version }}'
+
+    - name: '{{ package_id }} : set package update true'
+      set_fact:
+        update: true
+        force_update: true
+  when: available_version > current_version

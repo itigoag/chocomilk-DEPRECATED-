@@ -1,0 +1,23 @@
+---
+- name: '{{ package_id }} : download setup file {{ loop_file_hash }}'
+  get_url:
+    url: '{{ loop_file_hash }}'
+    dest: '{{ pwd }}'
+    validate_certs: false
+  register: register_files
+
+- name: '{{ package_id }} : load file hash'
+  stat:
+    path: '{{ register_files.dest }}'
+    checksum_algorithm: 'sha512'
+  register: register_files_hash
+
+- name: '{{ package_id }} : set file hash'
+  set_fact:
+    file_hash: '{{ register_files_hash.stat.checksum }}'
+  when: file_hash is undefined
+
+- name: '{{ package_id }} : set file hash 64'
+  set_fact:
+    file64_hash: '{{ register_files_hash.stat.checksum }}'
+  when: file_hash is not undefined
