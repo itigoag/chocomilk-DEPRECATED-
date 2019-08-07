@@ -13,3 +13,5 @@
     nupkg: '{{ path_package }}/{{ package_id }}.{{ version }}.nupkg'
     repository: '{{ loop_deploy.repository }}'
     key: '{{ loop_deploy.key }}'
+  tags:
+    - deployment

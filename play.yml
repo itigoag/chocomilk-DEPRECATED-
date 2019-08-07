@@ -112,6 +112,8 @@
           loop_control:
             loop_var: loop_deploy
           loop: '{{ deploy | flatten(levels=1) }}'
+          tags:
+            - deployment
 
         - name: '{{ package_id }} : load notifications'
           include_tasks: notifications/{{ loop_notifications.provider }}.yml
@@ -119,5 +121,7 @@
             loop_var: loop_notifications
           when: loop_notifications is defined and loop_notifications
           loop: '{{ notifications | flatten(levels=1) }}'
+          tags:
+            - notifications
 
       when: force_update | bool
