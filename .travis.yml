@@ -1,0 +1,47 @@
+---
+language: python
+python: '3.6'
+
+# Use the new container infrastructure
+sudo: false
+
+# Install ansible
+addons:
+  apt:
+    packages:
+      - python-pip
+
+install:
+  # Install ansible
+  - pip install ansible
+
+  # Install ansible-lint
+  - pip install ansible-lint
+
+  # Install yamllint
+  - pip install yamllint
+
+  # Install tests rules
+  - git submodule add https://github.com/arillso/tests tests
+
+before_script:
+  # Check ansible version
+  - ansible --version
+
+  # Check ansible-lint version
+  - ansible-lint --version
+
+  # Check ansible-lint version
+  - yamllint --version
+
+script:
+  # Ansible Lint check
+  - ansible-lint .
+
+  # YAML Lint check
+  - yamllint .
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
