@@ -37,3 +37,9 @@ play:
 
 debug:
 	ansible-playbook $(ANSIBLE_PLAYBOOK) -i hosts -vvvvv
+
+package:
+	ansible-playbook $(ANSIBLE_PLAYBOOK) -i hosts --skip-tags "deployment,notifications"
+
+package-debug:
+	ansible-playbook $(ANSIBLE_PLAYBOOK) -i hosts --skip-tags "deployment,notifications" -vvvvv
