@@ -27,7 +27,7 @@ clone:
 	@git clone $(ANSIBLE_PLAYBOOK_REPO) chocomilk 2>&1
 
 hosts: 
-	@echo "travis-ci" > hosts
+	@echo "chocomilk" > hosts
 
 travis: 
 	ansible-playbook $(ANSIBLE_PLAYBOOK_BEFORE) -i hosts

@@ -1,6 +1,6 @@
 ---
 - name: 'chocomilk'
-  hosts: travis-ci
+  hosts: chocomilk
   connection: local
   gather_facts: false
   vars:

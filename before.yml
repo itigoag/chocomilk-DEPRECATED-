@@ -1,6 +1,6 @@
 ---
 - name: 'before chocomilk'
-  hosts: travis-ci
+  hosts: chocomilk
   connection: local
   gather_facts: false
   tasks:
