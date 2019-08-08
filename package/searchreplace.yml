@@ -1,0 +1,6 @@
+---
+- name: 'include searchreplace'
+  include_tasks: package/searchreplace_tasks.yml
+  loop: '{{ loop_searchreplace.value }}'
+  loop_control:
+    loop_var: loop_searchreplace_tasks

@@ -1,0 +1,25 @@
+---
+- name: '{{ package_id }} : nuspec Update to new Version'
+  xml:
+    path: '{{ path_nuspec }}'
+    namespaces:
+      ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
+    xpath: /ns:package/ns:metadata/ns:version
+    value: '{{ version }}'
+
+- name: '{{ package_id }} : read README'
+  set_fact:
+    content: "{{ lookup('file', path_readme ).splitlines() }}"
+
+- name: 'Update description'
+  xml:
+    path: '{{ path_nuspec }}'
+    namespaces:
+      ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
+    xpath: /ns:package/ns:metadata/ns:description
+    value: |
+      {% for value in content %}
+      {% if loop.index > readme.start and loop.index < readme.end %}
+      {{ value }}
+      {% endif %}
+      {% endfor %}

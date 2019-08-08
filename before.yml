@@ -1,0 +1,28 @@
+---
+- name: 'before chocomilk'
+  hosts: chocomilk
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: 'install python3-apt'
+      become: true
+      shell: apt install -y python3-apt
+
+    - name: 'install apt package'
+      become: true
+      apt:
+        state: latest
+        name:
+          - python-pip
+          - libxml2
+          - libxml2-dev
+          - libxslt-dev
+          - python-dev
+        update_cache: true
+
+    - name: 'install pip package'
+      become: true
+      pip:
+        name:
+          - docker
+          - lxml
