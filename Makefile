@@ -1,15 +1,15 @@
 ## Makefile to build a Chocolatey package with chocomilk
 
-## CUSTOMISATION ###############################################################
+## CUSTOMIZATION ###############################################################
 #
 
 # Ansible playbook repository which contains the playbook referenced
 ANSIBLE_PLAYBOOK_REPO ?= https://github.com/itigoag/chocomilk.git
 
-# Ansible before provision playbook
+# Ansible before provisioning playbook
 ANSIBLE_PLAYBOOK_BEFORE ?= chocomilk/before.yml
 
-# Ansible provision playbook
+# Ansible provisioning playbook
 ANSIBLE_PLAYBOOK ?= chocomilk/play.yml
 
 .PHONY: all
