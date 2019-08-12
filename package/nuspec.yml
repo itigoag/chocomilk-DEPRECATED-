@@ -5,7 +5,7 @@
     namespaces:
       ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
     xpath: /ns:package/ns:metadata/ns:version
-    value: '{{ version }}'
+    value: '{{ available_version }}'
 
 - name: '{{ package_id }} : read README'
   set_fact:

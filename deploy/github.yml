@@ -20,7 +20,7 @@
     - deployment
 
 - name: '{{ package_id }} : git commit'
-  shell: "git --git-dir={{ path_package }}/.git/ --work-tree={{ path_package }}/ commit -m 'chocomilk: Update to {{ version }}'"
+  shell: "git --git-dir={{ path_package }}/.git/ --work-tree={{ path_package }}/ commit -m 'chocomilk: Update to {{ available_version }}'"
   tags:
     - deployment
 
