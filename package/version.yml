@@ -4,6 +4,7 @@
     url: '{{ changelog }}'
     return_content: true
     validate_certs: false
+    body_format: '{{ changelog_format | default(omit) }}'
   register: register_changelog
 
 - name: '{{ package_id }} : load current version'
@@ -17,7 +18,7 @@
 
 - name: '{{ package_id }} : search version'
   set_fact:
-    available_version: "{{ version | regex_replace('-', '.') }}"
+    available_version: "{{ versions_prefix | default() }}{{ version | regex_replace('-', '.') }}"
     current_version: '{{ register_nuspec.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}version"] }}'
 
 - block:

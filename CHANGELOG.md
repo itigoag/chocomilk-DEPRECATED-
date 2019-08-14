@@ -3,6 +3,14 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 and [human-readable changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 0.2.0
+
+### Added
+
+- add option for pre and after tasks in the .milk folder of the package
+- add jmespath package and option changelog body_format
+- add version perfix
+
 ## 0.1.1
 
 ### Added

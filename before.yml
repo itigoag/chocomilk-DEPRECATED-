@@ -26,3 +26,4 @@
         name:
           - docker
           - lxml
+          - jmespath

@@ -56,6 +56,22 @@
         content: text
       register: register_package_id
 
+    - name: 'Search pre-tasks file'
+      find:
+        paths: '{{ register_package_directory.files[0].path }}/.milk'
+        recurse: true
+        patterns: '*pretasks*'
+        hidden: true
+      register: register_pretasks_path
+
+    - name: 'Search after-tasks file'
+      find:
+        paths: '{{ register_package_directory.files[0].path }}/.milk'
+        recurse: true
+        patterns: '*aftertasks*'
+        hidden: true
+      register: register_aftertasks_path
+
     - name: 'Sets search info'
       set_fact:
         path_package: '{{ register_package_directory.files[0].path }}'
@@ -64,8 +80,10 @@
         path_milk: '{{ register_milk_path.files[0].path }}'
         path_readme: '{{ register_readme_path.files[0].path }}'
         package_id: '{{ register_package_id.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}id"] }}'
+        path_pretasks: '{{ register_pretasks_path.files[0].path | default(omit) }}'
+        path_aftertasks: '{{ register_aftertasks_path.files[0].path | default(omit) }}'
 
-    - name: Include Playbooks Vara
+    - name: 'include .milk vars'
       include_vars:
         file: '{{ path_milk }}'
 
@@ -75,6 +93,10 @@
       include_tasks: package/version.yml
 
     - block:
+        - name: 'include pre-tasks'
+          include_tasks: '{{ path_pretasks }}'
+          when: path_pretasks is defined and path_pretasks
+
         # File Hash
         - name: '{{ package_id }} : include file hash'
           include_tasks: package/file_hash.yml
@@ -90,8 +112,6 @@
           loop: '{{ searchreplace | dict2items }}'
           loop_control:
             loop_var: loop_searchreplace
-          tags:
-            - test
 
         - name: '{{ package_id }} : include nuspec'
           include_tasks: package/nuspec.yml
@@ -106,6 +126,10 @@
             working_dir: '{{ path_package }}/package'
             volumes:
               - '{{ path_package }}:{{ path_package }}'
+
+        - name: 'include after-tasks'
+          include_tasks: '{{ path_aftertasks }}'
+          when: path_aftertasks is defined and path_aftertasks
 
         - name: '{{ package_id }} : load deploy'
           include_tasks: deploy/{{ loop_deploy.provider }}.yml
