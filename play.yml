@@ -56,7 +56,7 @@
         content: text
       register: register_package_id
 
-    - name: 'Search pretasks file'
+    - name: 'Search pre-tasks file'
       find:
         paths: '{{ register_package_directory.files[0].path }}/.milk'
         recurse: true
@@ -64,7 +64,7 @@
         hidden: true
       register: register_pretasks_path
 
-    - name: 'Search aftertasks file'
+    - name: 'Search after-tasks file'
       find:
         paths: '{{ register_package_directory.files[0].path }}/.milk'
         recurse: true
@@ -83,7 +83,7 @@
         path_pretasks: '{{ register_pretasks_path.files[0].path | default(omit) }}'
         path_aftertasks: '{{ register_aftertasks_path.files[0].path | default(omit) }}'
 
-    - name: Include Playbooks Vara
+    - name: 'include .milk vars'
       include_vars:
         file: '{{ path_milk }}'
 
@@ -93,7 +93,7 @@
       include_tasks: package/version.yml
 
     - block:
-        - name: 'include pretasks'
+        - name: 'include pre-tasks'
           include_tasks: '{{ path_pretasks }}'
           when: path_pretasks is defined and path_pretasks
 
@@ -127,7 +127,7 @@
             volumes:
               - '{{ path_package }}:{{ path_package }}'
 
-        - name: 'include aftertasks'
+        - name: 'include after-tasks'
           include_tasks: '{{ path_aftertasks }}'
           when: path_aftertasks is defined and path_aftertasks
 
