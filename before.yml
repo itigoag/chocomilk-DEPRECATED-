@@ -19,6 +19,7 @@
           - libxslt-dev
           - python-dev
           - python-jmespath
+          - python3-jmespath
         update_cache: true
 
     - name: 'install pip package'
