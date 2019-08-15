@@ -18,7 +18,7 @@
 
 - name: '{{ package_id }} : search version'
   set_fact:
-    available_version: "{{ versions_prefix | default() }}{{ version | regex_replace('-', '.') }}"
+    available_version: "{{ versions_prefix | default() }}{{ version | regex_replace('[-|_]', '.') }}"
     current_version: '{{ register_nuspec.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}version"] }}'
 
 - block:
