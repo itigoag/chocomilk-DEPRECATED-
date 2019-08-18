@@ -56,6 +56,15 @@
         content: text
       register: register_package_id
 
+    - name: 'Search package title'
+      xml:
+        path: '{{ register_nuspec_file.files[0].path }}'
+        namespaces:
+          ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
+        xpath: /ns:package/ns:metadata/ns:title
+        content: text
+      register: register_package_title
+
     - name: 'Search pre-tasks file'
       find:
         paths: '{{ register_package_directory.files[0].path }}/.milk'
@@ -80,6 +89,7 @@
         path_milk: '{{ register_milk_path.files[0].path }}'
         path_readme: '{{ register_readme_path.files[0].path }}'
         package_id: '{{ register_package_id.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}id"] }}'
+        package_title: '{{ register_package_title.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}title"] }}'
         path_pretasks: '{{ register_pretasks_path.files[0].path | default(omit) }}'
         path_aftertasks: '{{ register_aftertasks_path.files[0].path | default(omit) }}'
 
