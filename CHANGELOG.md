@@ -11,7 +11,7 @@ and [human-readable changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Changed message text to a new update.
+- Changed message text to a new update
 
 ## 0.2.2
 
