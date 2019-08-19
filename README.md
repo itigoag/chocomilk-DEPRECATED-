@@ -12,17 +12,17 @@ To use chcomilk it is sufficient to use a common Linux distrubiton and copy the 
 
 ### travis-ci
 
-How chocomilk can be used in travis-ci is [documented here](ci/travis-ci).
+How chocomilk can be used in travis-ci is [documented here](https://itigoag.github.io/chocomilk/#/ci/travis-ci).
 
 ### gitlab-ci
 
-How chocomilk can be used in gitlab-ci is [documented here](ci/gitlab-ci).
+How chocomilk can be used in gitlab-ci is [documented here](https://itigoag.github.io/chocomilk/#/ci/gitlab-ci).
 
 ## Configuration
 
 Each repository of a Chocoalatey package has a .milk file that contains the information necessary to update a package.
 
-[documented here](.milk).
+[documented here](https://itigoag.github.io/chocomilk/#/milk).
 
 ## Contributors
 
