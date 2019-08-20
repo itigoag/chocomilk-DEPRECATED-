@@ -8,7 +8,7 @@ Chocomilk is an autoupdater for Chocolatey Packages. The tool is built with Ansi
 
 ### Local
 
-To use chcomilk it is sufficient to use a common Linux distrubiton and copy the Makefile ui and install Ansible.
+To use chocomilk it is sufficient to use a common Linux distribution and copy the Makefile ui and install Ansible.
 
 ### travis-ci
 
