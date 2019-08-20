@@ -39,9 +39,6 @@ readme:
 # deploy
 deploy:
   - provider: chocolatey
-    repository: 'https://nuget.itigo.tech/upload'
-    key: "{{ lookup('env','CHOCOLATEY_ITIGO_API_KEY') }}"
-  - provider: chocolatey
     repository: 'https://push.chocolatey.org/'
     key: "{{ lookup('env','CHOCOLATEY_ORG_API_KEY') }}"
   - provider: github
