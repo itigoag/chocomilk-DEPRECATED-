@@ -50,7 +50,7 @@ deploy:
 # Notification
 notifications:
   - provider: mattermost
-    url: 'https://matters.itigo.tech'
+    url: 'https://matters.example.com'
     key: "{{ lookup('env','MATTERMOST_API_KEY') }}"
     channel: 'software-packages'
 ```
