@@ -39,9 +39,6 @@ readme:
 # deploy
 deploy:
   - provider: chocolatey
-    repository: 'https://nuget.itigo.tech/upload'
-    key: "{{ lookup('env','CHOCOLATEY_ITIGO_API_KEY') }}"
-  - provider: chocolatey
     repository: 'https://push.chocolatey.org/'
     key: "{{ lookup('env','CHOCOLATEY_ORG_API_KEY') }}"
   - provider: github
@@ -53,7 +50,7 @@ deploy:
 # Notification
 notifications:
   - provider: mattermost
-    url: 'https://matters.itigo.tech'
+    url: 'https://matters.example.com'
     key: "{{ lookup('env','MATTERMOST_API_KEY') }}"
     channel: 'software-packages'
 ```

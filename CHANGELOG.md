@@ -13,11 +13,11 @@ and [human-readable changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Add to the list the version with underlined by a dot to be replaced
+- Replace underlines in version numbers by a dot
 
 ### Changed
 
-- Changed message text to a new update
+- Changed text of the new update message
 
 ## 0.2.2
 
