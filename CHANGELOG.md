@@ -3,6 +3,12 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 and [human-readable changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 0.2.4
+
+### Fixed
+
+- Fixed Documentation page
+
 ## 0.2.3
 
 ### Added
