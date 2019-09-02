@@ -4,7 +4,7 @@
     url: '{{ loop_notifications.url }}'
     api_key: '{{ loop_notifications.key }}'
     text: |
-      "{{ package_title }} has been updated from version [{{ current_version }}](https://img.shields.io/badge/{{ current_version }}-inactive) to version [{{ available_version }}](https://img.shields.io/badge/{{ available_version }}-green)."
+      {{ package_title }} has been updated from version ![[{{ current_version }}](https://img.shields.io/badge/{{ current_version }}-inactive)]() to version ![{{ available_version }}](https://img.shields.io/badge/{{ available_version }}-green).
     channel: '{{ loop_notifications.channel }}'
     username: 'chocomilk'
     icon_url: 'https://cdn.jsdelivr.net/gh/itigoag/chocomilk@master/docs/_images/chocomilk.jpg'
