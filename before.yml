@@ -20,7 +20,6 @@
           - python-dev
           - python-jmespath
           - python3-jmespath
-          - requests[security]
         update_cache: true
 
     - name: 'install pip package'
