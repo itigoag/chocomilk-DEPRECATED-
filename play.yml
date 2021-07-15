@@ -84,13 +84,34 @@
     - name: "Sets search info"
       set_fact:
         path_package: "{{ register_package_directory.files[0].path }}"
+
+    - name: "Sets search info"
+      set_fact:
         path_nuspec: "{{ register_nuspec_file.files[0].path }}"
+
+    - name: "Sets search info"
+      set_fact:
         path_chocolateyinstall: "{{ register_chocolateyinstall_path.files[0].path }}"
+
+    - name: "Sets search info"
+      set_fact:
         path_milk: "{{ register_milk_path.files[0].path }}"
+
+    - name: "Sets search info"
+      set_fact:
         path_readme: "{{ register_readme_path.files[0].path }}"
+
+    - name: "Sets search info"
+      set_fact:
         package_id: '{{ register_package_id.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}id"] }}'
+
+    - name: "Sets search info"
+      set_fact:
         package_title: '{{ register_package_title.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}title"] }}'
         path_pretasks: "{{ register_pretasks_path.files[0].path | default(omit) }}"
+
+    - name: "Sets search info"
+      set_fact:
         path_aftertasks: "{{ register_aftertasks_path.files[0].path | default(omit) }}"
 
     - name: "include .milk vars"
