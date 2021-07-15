@@ -1,160 +1,160 @@
 ---
-- name: 'chocomilk'
-  hosts: chocomilk
+- name: "chocomilk"
+  hosts: all
   connection: local
   gather_facts: false
   vars:
     force_update: false
     pwd: "{{ lookup('env','PWD') }}"
   pre_tasks:
-    - name: 'Search package directory'
+    - name: "Search package directory"
       find:
-        paths: '{{ pwd }}'
+        paths: "{{ pwd }}"
         recurse: false
         file_type: directory
-        excludes: 'chocomilk'
+        excludes: "chocomilk"
       register: register_package_directory
 
-    - name: 'Search .nuspec file'
+    - name: "Search .nuspec file"
       find:
-        paths: '{{ pwd }}'
+        paths: "{{ pwd }}"
         recurse: true
-        patterns: '*.nuspec'
+        patterns: "*.nuspec"
         hidden: true
       register: register_nuspec_file
 
-    - name: 'Search .milk file'
+    - name: "Search .milk file"
       find:
-        paths: '{{ pwd }}'
+        paths: "{{ pwd }}"
         recurse: true
-        patterns: '.milk.yml'
+        patterns: ".milk.yml"
         hidden: true
       register: register_milk_path
 
-    - name: 'Search chocolateyinstall file'
+    - name: "Search chocolateyinstall file"
       find:
-        paths: '{{ pwd }}'
+        paths: "{{ pwd }}"
         recurse: true
-        patterns: '*chocolateyinstall.ps1'
+        patterns: "*chocolateyinstall.ps1"
         hidden: true
       register: register_chocolateyinstall_path
 
-    - name: 'Search README file'
+    - name: "Search README file"
       find:
-        paths: '{{ register_package_directory.files[0].path }}'
+        paths: "{{ register_package_directory.files[0].path }}"
         recurse: true
-        patterns: '*README*'
+        patterns: "*README*"
         hidden: true
       register: register_readme_path
 
-    - name: 'Search package id'
+    - name: "Search package id"
       xml:
-        path: '{{ register_nuspec_file.files[0].path }}'
+        path: "{{ register_nuspec_file.files[0].path }}"
         namespaces:
-          ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
+          ns: "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"
         xpath: /ns:package/ns:metadata/ns:id
         content: text
       register: register_package_id
 
-    - name: 'Search package title'
+    - name: "Search package title"
       xml:
-        path: '{{ register_nuspec_file.files[0].path }}'
+        path: "{{ register_nuspec_file.files[0].path }}"
         namespaces:
-          ns: 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'
+          ns: "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"
         xpath: /ns:package/ns:metadata/ns:title
         content: text
       register: register_package_title
 
-    - name: 'Search pre-tasks file'
+    - name: "Search pre-tasks file"
       find:
-        paths: '{{ register_package_directory.files[0].path }}/.milk'
+        paths: "{{ register_package_directory.files[0].path }}/.milk"
         recurse: true
-        patterns: '*pretasks*'
+        patterns: "*pretasks*"
         hidden: true
       register: register_pretasks_path
 
-    - name: 'Search after-tasks file'
+    - name: "Search after-tasks file"
       find:
-        paths: '{{ register_package_directory.files[0].path }}/.milk'
+        paths: "{{ register_package_directory.files[0].path }}/.milk"
         recurse: true
-        patterns: '*aftertasks*'
+        patterns: "*aftertasks*"
         hidden: true
       register: register_aftertasks_path
 
-    - name: 'Sets search info'
+    - name: "Sets search info"
       set_fact:
-        path_package: '{{ register_package_directory.files[0].path }}'
-        path_nuspec: '{{ register_nuspec_file.files[0].path }}'
-        path_chocolateyinstall: '{{ register_chocolateyinstall_path.files[0].path }}'
-        path_milk: '{{ register_milk_path.files[0].path }}'
-        path_readme: '{{ register_readme_path.files[0].path }}'
+        path_package: "{{ register_package_directory.files[0].path }}"
+        path_nuspec: "{{ register_nuspec_file.files[0].path }}"
+        path_chocolateyinstall: "{{ register_chocolateyinstall_path.files[0].path }}"
+        path_milk: "{{ register_milk_path.files[0].path }}"
+        path_readme: "{{ register_readme_path.files[0].path }}"
         package_id: '{{ register_package_id.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}id"] }}'
         package_title: '{{ register_package_title.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}title"] }}'
-        path_pretasks: '{{ register_pretasks_path.files[0].path | default(omit) }}'
-        path_aftertasks: '{{ register_aftertasks_path.files[0].path | default(omit) }}'
+        path_pretasks: "{{ register_pretasks_path.files[0].path | default(omit) }}"
+        path_aftertasks: "{{ register_aftertasks_path.files[0].path | default(omit) }}"
 
-    - name: 'include .milk vars'
+    - name: "include .milk vars"
       include_vars:
-        file: '{{ path_milk }}'
+        file: "{{ path_milk }}"
 
   tasks:
     # Check new Version
-    - name: '{{ package_id }} : include check new version'
+    - name: "{{ package_id }} : include check new version"
       include_tasks: package/version.yml
 
     - block:
-        - name: 'include pre-tasks'
-          include_tasks: '{{ path_pretasks }}'
+        - name: "include pre-tasks"
+          include_tasks: "{{ path_pretasks }}"
           when: path_pretasks is defined and path_pretasks
 
         # File Hash
-        - name: '{{ package_id }} : include file hash'
+        - name: "{{ package_id }} : include file hash"
           include_tasks: package/file_hash.yml
           loop:
-            - '{{ url }}'
-            - '{{ url64 | default(false) }}'
+            - "{{ url }}"
+            - "{{ url64 | default(false) }}"
           when: loop_file_hash is defined and loop_file_hash
           loop_control:
             loop_var: loop_file_hash
 
-        - name: '{{ package_id }} : include searchreplace'
+        - name: "{{ package_id }} : include searchreplace"
           include_tasks: package/searchreplace.yml
-          loop: '{{ searchreplace | dict2items }}'
+          loop: "{{ searchreplace | dict2items }}"
           loop_control:
             loop_var: loop_searchreplace
 
-        - name: '{{ package_id }} : include nuspec'
+        - name: "{{ package_id }} : include nuspec"
           include_tasks: package/nuspec.yml
 
-        - name: '{{ package_id }} : create package'
+        - name: "{{ package_id }} : create package"
           become: true
           docker_container:
             auto_remove: true
             name: choco_pack
-            image: 'linuturk/mono-choco'
-            command: 'pack -vd {{ package_id }}.nuspec --outputdirectory {{ path_package }}'
-            working_dir: '{{ path_package }}/package'
+            image: "linuturk/mono-choco"
+            command: "pack -vd {{ package_id }}.nuspec --outputdirectory {{ path_package }}"
+            working_dir: "{{ path_package }}/package"
             volumes:
-              - '{{ path_package }}:{{ path_package }}'
+              - "{{ path_package }}:{{ path_package }}"
 
-        - name: 'include after-tasks'
-          include_tasks: '{{ path_aftertasks }}'
+        - name: "include after-tasks"
+          include_tasks: "{{ path_aftertasks }}"
           when: path_aftertasks is defined and path_aftertasks
 
-        - name: '{{ package_id }} : load deploy'
+        - name: "{{ package_id }} : load deploy"
           include_tasks: deploy/{{ loop_deploy.provider }}.yml
           loop_control:
             loop_var: loop_deploy
-          loop: '{{ deploy | flatten(levels=1) }}'
+          loop: "{{ deploy | flatten(levels=1) }}"
           tags:
             - deployment
 
-        - name: '{{ package_id }} : load notifications'
+        - name: "{{ package_id }} : load notifications"
           include_tasks: notifications/{{ loop_notifications.provider }}.yml
           loop_control:
             loop_var: loop_notifications
           when: loop_notifications is defined and loop_notifications
-          loop: '{{ notifications | flatten(levels=1) }}'
+          loop: "{{ notifications | flatten(levels=1) }}"
           tags:
             - notifications
 
