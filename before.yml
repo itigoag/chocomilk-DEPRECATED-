@@ -1,14 +1,10 @@
 ---
-- name: 'before chocomilk'
+- name: "before chocomilk"
   hosts: chocomilk
   connection: local
   gather_facts: false
   tasks:
-    - name: 'install python3-apt'
-      become: true
-      shell: apt install -y python3-apt
-
-    - name: 'install apt package'
+    - name: "install apt package"
       become: true
       apt:
         state: latest
@@ -22,7 +18,7 @@
           - python3-jmespath
         update_cache: true
 
-    - name: 'install pip package'
+    - name: "install pip package"
       become: true
       pip:
         name:
