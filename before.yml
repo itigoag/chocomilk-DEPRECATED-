@@ -4,20 +4,6 @@
   connection: local
   gather_facts: false
   tasks:
-    - name: "install apt package"
-      become: true
-      apt:
-        state: latest
-        name:
-          - python-pip
-          - libxml2
-          - libxml2-dev
-          - libxslt-dev
-          - python-dev
-          - python-jmespath
-          - python3-jmespath
-        update_cache: true
-
     - name: "install pip package"
       become: true
       pip:
