@@ -1,17 +1,17 @@
 ---
-- name: '{{ package_id }} : Upload Package to {{ loop_deploy.repository }}'
+- name: "{{ package_id }} : Upload Package to {{ loop_deploy.repository }}"
   become: true
   docker_container:
     auto_remove: true
     name: choco_push
-    image: 'linuturk/mono-choco'
-    command: push "{{ nupkg }}" --source "'{{ repository }}'" -k="'{{ key }}'"
-    working_dir: '{{ pwd }}'
+    image: "linuturk/mono-choco"
+    command: push "{{ nupkg }}" --source "'{{ repository }}'" --key "'{{ key }}'"
+    working_dir: "{{ pwd }}"
     volumes:
-      - '{{ pwd }}:{{ pwd }}'
+      - "{{ pwd }}:{{ pwd }}"
   vars:
-    nupkg: '{{ path_package }}/{{ package_id }}.{{ available_version }}.nupkg'
-    repository: '{{ loop_deploy.repository }}'
-    key: '{{ loop_deploy.key }}'
+    nupkg: "{{ path_package }}/{{ package_id }}.{{ available_version }}.nupkg"
+    repository: "{{ loop_deploy.repository }}"
+    key: "{{ loop_deploy.key }}"
   tags:
     - deployment
