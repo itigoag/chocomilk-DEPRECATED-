@@ -11,7 +11,7 @@
       - "{{ pwd }}:{{ pwd }}"
   vars:
     nupkg: "{{ path_package }}/{{ package_id }}.{{ available_version }}.nupkg"
-    repository: "{{ loop_deploy.repository }}"
-    key: "{{ loop_deploy.key }}"
+    repository: "{{ loop_deploy.repository | mandatory }}"
+    key: "{{ loop_deploy.key | mandatory }}"
   tags:
     - deployment
