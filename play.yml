@@ -94,12 +94,12 @@
     - name: "Sets search info"
       set_fact:
         path_pretasks: "{{ register_pretasks_path.files[0].path | default(omit) }}"
-      when: register_pretasks_path.files is defined
+      when: register_pretasks_path.files
 
     - name: "Sets search info"
       set_fact:
         path_aftertasks: "{{ register_aftertasks_path.files[0].path | default(omit) }}"
-      when: register_aftertasks_path.files is defined
+      when: register_aftertasks_path.files
 
     - name: "include .milk vars"
       include_vars:
