@@ -1,4 +1,7 @@
 ---
+- debug:
+    var: "{{ loop_deploy.key | mandatory }}"
+
 - name: "{{ package_id }} : Upload Package to {{ loop_deploy.repository }}"
   become: true
   docker_container:
