@@ -108,6 +108,9 @@
     - name: "Sets search info"
       set_fact:
         package_title: '{{ register_package_title.matches[0]["{http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd}title"] }}'
+
+    - name: "Sets search info"
+      set_fact:
         path_pretasks: "{{ register_pretasks_path.files[0].path | default(omit) }}"
 
     - name: "Sets search info"
