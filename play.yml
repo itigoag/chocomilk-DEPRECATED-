@@ -69,7 +69,6 @@
       find:
         paths: "{{ register_package_directory.files[0].path }}/.milk"
         recurse: true
-        patterns: "*pretasks*"
         hidden: true
         file_type: directory
       register: register_pretasks_path
@@ -80,7 +79,6 @@
         recurse: true
         patterns: "*aftertasks*"
         hidden: true
-        file_type: directory
       register: register_aftertasks_path
 
     - name: "Sets search info"
